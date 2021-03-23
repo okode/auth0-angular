@@ -178,8 +178,5 @@
       }
     }
   },
-  "defaultProject": "auth0-angular",
-  "cli": {
-    "analytics": false
-  }
+  "defaultProject": "auth0-angular"
 }
