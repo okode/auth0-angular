@@ -283,6 +283,34 @@ export class AuthService implements OnDestroy {
     );
   }
 
+  auth0HandleCallback(url?: string): void {
+    if (
+      (url?.includes('code=') || url?.includes('error=')) &&
+      url?.includes('state=')
+    ) {
+      from(this.auth0Client.handleRedirectCallback(url))
+        .pipe(
+          map((result) => {
+            let target = '/';
+            if (result) {
+              if (result.appState) {
+                if (result.appState.target) {
+                  target = result.appState.target;
+                }
+              }
+            }
+            this.navigator.navigateByUrl(target);
+          }),
+          tap(() => {
+            this.refreshState$.next();
+            this.isLoadingSubject$.next(false);
+          }),
+          takeUntil(this.ngUnsubscribe$)
+        )
+        .subscribe();
+    }
+  }
+
   private shouldHandleCallback(): Observable<boolean> {
     return of(this.location.path()).pipe(
       map((search) => {
