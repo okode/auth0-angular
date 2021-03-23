@@ -10,7 +10,6 @@ cypress.env.json
 .release
 
 # compiled output
-/dist
 /tmp
 /out-tsc
 # Only exists if Bazel was run
